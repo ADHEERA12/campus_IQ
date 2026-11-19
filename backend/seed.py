@@ -8,41 +8,58 @@ def seed_database():
     db = SessionLocal()
 
     try:
-        # Prevent duplicate data if the script is run again
-        if db.query(User).count() > 0:
-            print("Database already contains data.")
+        # Check if admin exists
+        admin_user = db.query(User).filter(User.role == "admin").first()
+        if not admin_user:
+            admin_user = User(
+                name="System Administrator",
+                username="admin",
+                email="admin@school.edu",
+                password=get_password_hash("admin123"),
+                role="admin",
+                status="active"
+            )
+            db.add(admin_user)
+            db.commit()
+
+        if db.query(User).count() > 1:
+            print("Database already contains user data.")
             return
 
         # -------------------------
-        # Create users
+        # Create default users
         # -------------------------
 
         parent = User(
             name="Mr. Sharma",
             username="sharma_parent",
             password=get_password_hash("temp123"),
-            role="parent"
+            role="parent",
+            status="active"
         )
 
         student_user = User(
             name="Rahul",
             username="rahul_student",
             password=get_password_hash("temp123"),
-            role="student"
+            role="student",
+            status="active"
         )
 
         teacher = User(
             name="Mrs. Iyer",
             username="iyer_teacher",
             password=get_password_hash("temp123"),
-            role="teacher"
+            role="teacher",
+            status="active"
         )
 
         principal = User(
             name="Mr. Rao",
             username="rao_principal",
             password=get_password_hash("temp123"),
-            role="principal"
+            role="principal",
+            status="active"
         )
 
         db.add_all([

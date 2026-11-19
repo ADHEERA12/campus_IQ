@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, Text, D
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
+# pyrefly: ignore[missing-import]
 from database.database import Base
 
 
@@ -11,8 +12,12 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
     username = Column(String(100), unique=True, nullable=False)
+    email = Column(String(120), nullable=True)
     password = Column(String(255), nullable=False)
     role = Column(String(20), nullable=False)
+    status = Column(String(20), default="active") # "active", "invited", "disabled"
+    activation_token = Column(String(100), nullable=True)
+    employee_id = Column(String(50), nullable=True)
 
     student = relationship(
         "Student",
@@ -22,11 +27,27 @@ class User(Base):
     )
 
 
+class ClassSection(Base):
+    __tablename__ = "classes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False)
+    section = Column(String(20), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 class Student(Base):
     __tablename__ = "students"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
+    student_code = Column(String(50), nullable=True)
+
+    class_id = Column(
+        Integer,
+        ForeignKey("classes.id"),
+        nullable=True
+    )
 
     user_id = Column(
         Integer,

@@ -1,13 +1,23 @@
-import { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import api from "../services/api";
+import { Bot, Send, User, Sparkles, AlertCircle, Wrench } from "lucide-react";
 
-function AIChat() {
+function AIChat({ title = "🤖 XYZ AI Assistant", subtitle = "Your intelligent school attendance assistant." }) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, loading]);
 
     const sendMessage = async (e) => {
-        e.preventDefault();
+        e?.preventDefault();
 
         if (!message.trim()) {
             return;
@@ -52,6 +62,7 @@ function AIChat() {
                 {
                     sender: "ai",
                     text: errorMessage,
+                    isError: true,
                 },
             ]);
         } finally {
@@ -59,57 +70,67 @@ function AIChat() {
         }
     };
 
-    return (
-        <div className="ai-chat">
+    const handleSuggestion = (promptText) => {
+        setMessage(promptText);
+    };
 
-            <div className="chat-header">
+    return (
+        <div className="chat-card">
+            <div className="chat-card-header">
+                <div className="chat-ai-avatar">
+                    <Bot size={22} />
+                </div>
                 <div>
-                    <h2>XYZ AI Assistant</h2>
-                    <p>Ask me anything about your school information</p>
+                    <h3>{title}</h3>
+                    <p>{subtitle}</p>
                 </div>
             </div>
 
-            <div className="chat-messages">
-
+            <div className="chat-messages-area">
                 {messages.length === 0 && (
-                    <div className="chat-welcome">
-                        <h3>How can I help you?</h3>
-
-                        <p>
-                            Ask questions about attendance,
-                            classes and school information.
+                    <div style={{ textAlign: 'center', padding: '30px 20px' }}>
+                        <div 
+                            style={{ 
+                                width: 56, 
+                                height: 56, 
+                                borderRadius: '50%', 
+                                background: 'var(--primary-orange-light)', 
+                                color: 'var(--primary-orange)', 
+                                display: 'inline-flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                marginBottom: 14 
+                            }}
+                        >
+                            <Sparkles size={28} />
+                        </div>
+                        <h4 style={{ fontSize: '1.1rem', color: 'var(--dark-navy)', marginBottom: 6 }}>How can I help you today?</h4>
+                        <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: 20 }}>
+                            Ask questions about attendance, required classes, or school info.
                         </p>
 
-                        <div className="suggestions">
-
+                        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '8px' }}>
                             <button
-                                onClick={() =>
-                                    setMessage("What is my attendance?")
-                                }
+                                type="button"
+                                className="chip-btn"
+                                onClick={() => handleSuggestion("What's my attendance?")}
                             >
-                                What is my attendance?
+                                What's my attendance?
                             </button>
-
                             <button
-                                onClick={() =>
-                                    setMessage(
-                                        "How many classes do I need to attend to reach 75%?"
-                                    )
-                                }
+                                type="button"
+                                className="chip-btn"
+                                onClick={() => handleSuggestion("How many classes do I need?")}
                             >
-                                Attendance goal
+                                How many classes do I need?
                             </button>
-
                             <button
-                                onClick={() =>
-                                    setMessage(
-                                        "Show my attendance details"
-                                    )
-                                }
+                                type="button"
+                                className="chip-btn"
+                                onClick={() => handleSuggestion("Explain my attendance")}
                             >
-                                Attendance details
+                                Explain my attendance
                             </button>
-
                         </div>
                     </div>
                 )}
@@ -117,68 +138,97 @@ function AIChat() {
                 {messages.map((msg, index) => (
                     <div
                         key={index}
-                        className={
-                            msg.sender === "user"
-                                ? "message user-message"
-                                : "message ai-message"
-                        }
+                        className={`chat-message-row ${msg.sender}`}
                     >
-                        <div className="message-label">
-                            {msg.sender === "user"
-                                ? "You"
-                                : "XYZ AI"}
-                        </div>
+                        {msg.sender === "ai" && (
+                            <div 
+                                style={{ 
+                                    width: 32, 
+                                    height: 32, 
+                                    borderRadius: '50%', 
+                                    background: 'var(--primary-orange-light)', 
+                                    color: 'var(--primary-orange)', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}
+                            >
+                                <Bot size={18} />
+                            </div>
+                        )}
 
-                        <div className="message-text">
+                        <div className={`chat-bubble ${msg.sender} ${msg.isError ? 'error-bubble' : ''}`}>
                             {msg.text}
+                            {msg.tool && (
+                                <div style={{ fontSize: '0.75rem', opacity: 0.8, marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <Wrench size={12} />
+                                    <span>Tool used: {msg.tool}</span>
+                                </div>
+                            )}
                         </div>
 
-                        {msg.tool && (
-                            <div className="tool-info">
-                                AI tool used: {msg.tool}
+                        {msg.sender === "user" && (
+                            <div 
+                                style={{ 
+                                    width: 32, 
+                                    height: 32, 
+                                    borderRadius: '50%', 
+                                    background: 'var(--dark-navy)', 
+                                    color: '#FFFFFF', 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}
+                            >
+                                <User size={18} />
                             </div>
                         )}
                     </div>
                 ))}
 
                 {loading && (
-                    <div className="message ai-message">
-                        <div className="message-label">
-                            XYZ AI
+                    <div className="chat-message-row ai">
+                        <div 
+                            style={{ 
+                                width: 32, 
+                                height: 32, 
+                                borderRadius: '50%', 
+                                background: 'var(--primary-orange-light)', 
+                                color: 'var(--primary-orange)', 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center',
+                                flexShrink: 0
+                            }}
+                        >
+                            <Bot size={18} />
                         </div>
-
-                        <div className="message-text">
-                            Thinking...
+                        <div className="chat-bubble ai">
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                                <span className="spinner spinner-orange" style={{ width: 14, height: 14 }}></span>
+                                <span>XYZ AI is thinking...</span>
+                            </span>
                         </div>
                     </div>
                 )}
-
+                <div ref={messagesEndRef} />
             </div>
 
-            <form
-                className="chat-input-area"
-                onSubmit={sendMessage}
-            >
-
+            <form className="chat-input-form" onSubmit={sendMessage}>
                 <input
                     type="text"
-                    placeholder="Ask XYZ AI..."
+                    placeholder="Ask anything about attendance..."
                     value={message}
-                    onChange={(e) =>
-                        setMessage(e.target.value)
-                    }
+                    onChange={(e) => setMessage(e.target.value)}
                     disabled={loading}
                 />
-
-                <button
-                    type="submit"
-                    disabled={loading || !message.trim()}
-                >
-                    {loading ? "..." : "Send"}
+                <button type="submit" className="btn btn-primary" disabled={loading || !message.trim()}>
+                    <Send size={16} />
+                    <span>Send</span>
                 </button>
-
             </form>
-
         </div>
     );
 }
