@@ -1,6 +1,8 @@
+import os
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 from database.database import engine, Base
 from database import models
@@ -17,40 +19,42 @@ from routers import (
     teacher,
 )
 
+load_dotenv()
 
 # ==========================================
 # APPLICATION
 # ==========================================
 
 app = FastAPI(
-    title="XYZ AI Assistant",
+    title="Campus IQ",
     description="AI-powered Student Attendance Management System",
     version="1.0.0",
 )
-
 
 # ==========================================
 # CORS CONFIGURATION
 # ==========================================
 
+origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173",
+).split(",")
+
+origins = [origin.strip() for origin in origins if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # ==========================================
 # DATABASE INITIALIZATION
 # ==========================================
 
 Base.metadata.create_all(bind=engine)
-
 
 # ==========================================
 # HOME ROUTE
@@ -59,10 +63,9 @@ Base.metadata.create_all(bind=engine)
 @app.get("/")
 def home():
     return {
-        "message": "XYZ AI Backend is running!",
+        "message": "Campus IQ Backend is running!",
         "status": "success",
     }
-
 
 # ==========================================
 # REGISTER ROUTERS
@@ -78,7 +81,6 @@ app.include_router(principal.router)
 app.include_router(chat.router)
 app.include_router(teacher.router)
 
-
 # ==========================================
 # HEALTH CHECK
 # ==========================================
@@ -87,5 +89,5 @@ app.include_router(teacher.router)
 def health_check():
     return {
         "status": "healthy",
-        "message": "Backend is working properly",
+        "message": "Backend is working propey",
     }
