@@ -1,0 +1,731 @@
+
+/* =========================================
+   CAMPUS IQ - WELCOME DASHBOARD
+========================================= */
+
+.welcome-page {
+    min-height: 100vh;
+    background: #F4F6FA;
+    color: #172554;
+    font-family: inherit;
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.welcome-navbar {
+    height: 76px;
+    padding: 0 7%;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E2E8F0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.welcome-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.welcome-brand-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #F97316, #EA580C);
+    box-shadow: 0 5px 14px rgba(249, 115, 22, 0.2);
+}
+
+.welcome-brand-text h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #172554;
+    letter-spacing: -0.4px;
+}
+
+.welcome-brand-text span {
+    display: block;
+    margin-top: 3px;
+    color: #94A3B8;
+    font-size: 0.72rem;
+}
+
+.welcome-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+
+    background: #FFFFFF;
+    color: #475569;
+
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.welcome-logout:hover {
+    background: #FFF7ED;
+    border-color: #FDBA74;
+    color: #EA580C;
+}
+
+/* =========================================
+   MAIN
+========================================= */
+
+.welcome-main {
+    width: min(1120px, 88%);
+    margin: 0 auto;
+    padding: 42px 0 24px;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.welcome-hero {
+    min-height: 330px;
+    padding: 44px 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+
+    overflow: hidden;
+    position: relative;
+
+    background: linear-gradient(
+        120deg,
+        #172554 0%,
+        #1E3A5F 65%,
+        #1D4ED8 100%
+    );
+
+    border-radius: 24px;
+    box-shadow: 0 15px 40px rgba(23, 37, 84, 0.12);
+}
+
+.welcome-hero::before {
+    content: "";
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+
+    right: 5%;
+    top: -150px;
+}
+
+.welcome-hero::after {
+    content: "";
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.08);
+
+    right: 15%;
+    bottom: -150px;
+}
+
+.welcome-hero-content {
+    max-width: 580px;
+    z-index: 2;
+}
+
+.welcome-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 8px 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+
+    background: rgba(255,255,255,0.07);
+
+    color: #FDBA74;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.welcome-hero h1 {
+    margin: 22px 0 14px;
+
+    color: #FFFFFF;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.welcome-hero h1 span {
+    display: block;
+    color: #FDBA74;
+}
+
+.welcome-hero-content > p {
+    max-width: 460px;
+    margin: 0;
+
+    color: #CBD5E1;
+    font-size: 0.95rem;
+    line-height: 1.8;
+}
+
+.welcome-primary-button {
+    margin-top: 26px;
+    padding: 13px 20px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #F97316;
+    color: #FFFFFF;
+
+    font-weight: 700;
+    font-size: 0.9rem;
+
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.welcome-primary-button:hover {
+    background: #EA580C;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
+}
+
+/* =========================================
+   HERO VISUAL
+========================================= */
+
+.welcome-hero-visual {
+    width: 280px;
+    min-width: 240px;
+    height: 240px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    z-index: 2;
+}
+
+.welcome-visual-circle {
+    width: 205px;
+    height: 205px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+
+    color: #FDBA74;
+
+    box-shadow:
+        0 0 0 20px rgba(255,255,255,0.025),
+        0 0 0 40px rgba(255,255,255,0.02);
+}
+
+.welcome-floating-card {
+    position: absolute;
+    bottom: 2px;
+    left: -10px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 13px 16px;
+
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 14px;
+
+    background: #FFFFFF;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.welcome-floating-icon {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #FFF7ED;
+    color: #F97316;
+}
+
+.welcome-floating-card strong {
+    display: block;
+    font-size: 0.82rem;
+    color: #172554;
+}
+
+.welcome-floating-card span {
+    display: block;
+    margin-top: 4px;
+
+    color: #94A3B8;
+    font-size: 0.7rem;
+}
+
+/* =========================================
+   SECTION HEADINGS
+========================================= */
+
+.welcome-profile-section,
+.welcome-quick-section {
+    margin-top: 36px;
+}
+
+.welcome-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.welcome-section-label {
+    color: #F97316;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.welcome-section-heading h2 {
+    margin: 7px 0 0;
+    font-size: 1.35rem;
+    font-weight: 750;
+    color: #172554;
+    letter-spacing: -0.4px;
+}
+
+/* =========================================
+   PROFILE CARD
+========================================= */
+
+.welcome-profile-card {
+    padding: 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.025);
+
+    transition: 0.2s ease;
+}
+
+.welcome-profile-card:hover {
+    border-color: #CBD5E1;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.045);
+}
+
+.welcome-profile-avatar {
+    width: 62px;
+    height: 62px;
+    min-width: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.welcome-profile-details {
+    min-width: 170px;
+}
+
+.welcome-profile-label {
+    color: #94A3B8;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.welcome-profile-details h3 {
+    margin: 5px 0 9px;
+
+    color: #172554;
+    font-size: 1.08rem;
+    font-weight: 750;
+}
+
+.welcome-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 5px 10px;
+
+    border-radius: 7px;
+
+    background: #FFF7ED;
+    color: #C2410C;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.welcome-profile-description {
+    flex: 1;
+
+    color: #64748B;
+    font-size: 0.86rem;
+    line-height: 1.7;
+}
+
+.welcome-profile-action {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+
+    background: #FFFFFF;
+    color: #64748B;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.welcome-profile-action:hover {
+    background: #FFF7ED;
+    color: #F97316;
+    border-color: #FDBA74;
+}
+
+/* =========================================
+   QUICK ACCESS
+========================================= */
+
+.welcome-quick-card {
+    padding: 22px 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 18px;
+
+    transition: 0.2s ease;
+}
+
+.welcome-quick-card:hover {
+    border-color: #BFDBFE;
+    box-shadow: 0 8px 24px rgba(29, 78, 216, 0.045);
+}
+
+.welcome-quick-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.welcome-quick-content {
+    flex: 1;
+}
+
+.welcome-quick-content h3 {
+    margin: 0;
+
+    color: #172554;
+    font-size: 0.95rem;
+    font-weight: 750;
+}
+
+.welcome-quick-content p {
+    margin: 6px 0 0;
+
+    color: #64748B;
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+.welcome-quick-button {
+    padding: 11px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #172554;
+    color: #FFFFFF;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.welcome-quick-button:hover {
+    background: #1E40AF;
+    transform: translateY(-1px);
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.welcome-footer {
+    margin-top: 45px;
+    padding: 20px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    border-top: 1px solid #E2E8F0;
+}
+
+.welcome-footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #172554;
+    font-size: 0.82rem;
+    font-weight: 750;
+}
+
+.welcome-footer-brand svg {
+    color: #F97316;
+}
+
+.welcome-footer > span {
+    color: #94A3B8;
+    font-size: 0.78rem;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .welcome-hero {
+        padding: 36px;
+    }
+
+    .welcome-hero-visual {
+        width: 220px;
+        min-width: 200px;
+    }
+
+    .welcome-visual-circle {
+        width: 165px;
+        height: 165px;
+    }
+
+    .welcome-visual-circle svg {
+        width: 72px;
+    }
+
+    .welcome-floating-card {
+        left: -5px;
+    }
+
+    .welcome-profile-card {
+        flex-wrap: wrap;
+    }
+
+    .welcome-profile-description {
+        flex-basis: 100%;
+        padding-left: 82px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .welcome-navbar {
+        height: 68px;
+        padding: 0 5%;
+    }
+
+    .welcome-brand-icon {
+        width: 39px;
+        height: 39px;
+    }
+
+    .welcome-brand-text h2 {
+        font-size: 1rem;
+    }
+
+    .welcome-brand-text span {
+        font-size: 0.65rem;
+    }
+
+    .welcome-logout {
+        padding: 9px 11px;
+        font-size: 0.78rem;
+    }
+
+    .welcome-main {
+        width: 90%;
+        padding-top: 24px;
+    }
+
+    .welcome-hero {
+        padding: 30px 24px;
+        min-height: auto;
+    }
+
+    .welcome-hero-visual {
+        display: none;
+    }
+
+    .welcome-hero h1 {
+        font-size: 2.1rem;
+    }
+
+    .welcome-hero-content > p {
+        font-size: 0.85rem;
+    }
+
+    .welcome-eyebrow {
+        font-size: 0.62rem;
+        letter-spacing: 0.6px;
+    }
+
+    .welcome-primary-button {
+        width: 100%;
+    }
+
+    .welcome-profile-section,
+    .welcome-quick-section {
+        margin-top: 28px;
+    }
+
+    .welcome-section-heading h2 {
+        font-size: 1.15rem;
+    }
+
+    .welcome-profile-card {
+        padding: 18px;
+        gap: 14px;
+    }
+
+    .welcome-profile-avatar {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+    }
+
+    .welcome-profile-details {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .welcome-profile-description {
+        padding-left: 0;
+        flex-basis: 100%;
+    }
+
+    .welcome-profile-action {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    .welcome-quick-card {
+        padding: 18px;
+        flex-wrap: wrap;
+    }
+
+    .welcome-quick-content {
+        min-width: 150px;
+    }
+
+    .welcome-quick-button {
+        width: 100%;
+    }
+
+    .welcome-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .welcome-hero {
+        padding: 24px 18px;
+    }
+
+    .welcome-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .welcome-brand {
+        gap: 8px;
+    }
+}

@@ -16,12 +16,14 @@ from database import models
 # Load environment variables
 load_dotenv()
 
-
 # JWT configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "")
+
+if SECRET_KEY == "":
+    raise ValueError("JWT_SECRET_KEY is missing from .env")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
-
 
 # Password hashing
 pwd_context = CryptContext(

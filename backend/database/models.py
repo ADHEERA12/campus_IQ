@@ -1,151 +1,163 @@
-from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, Text, DateTime
-from sqlalchemy.orm import relationship
 from datetime import datetime
+from datetime import datetime, date
+from sqlalchemy import (
+    Integer,
+    String,
+    Float,
+    Date,
+    ForeignKey,
+    Text,
+    DateTime,
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-# pyrefly: ignore[missing-import]
 from database.database import Base
 
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    username = Column(String(100), unique=True, nullable=False)
-    email = Column(String(120), nullable=True)
-    password = Column(String(255), nullable=False)
-    role = Column(String(20), nullable=False)
-    status = Column(String(20), default="active") # "active", "invited", "disabled"
-    activation_token = Column(String(100), nullable=True)
-    employee_id = Column(String(50), nullable=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    username: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    email: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    password: Mapped[str] = mapped_column(String(255), nullable=False)
+    role: Mapped[str] = mapped_column(String(20), nullable=False)
 
-    student = relationship(
+    status: Mapped[str] = mapped_column(String(20), default="active")
+    activation_token: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    employee_id: Mapped[str | None] = mapped_column(String(50), nullable=True)
+
+    student: Mapped["Student | None"] = relationship(
         "Student",
         foreign_keys="Student.user_id",
         back_populates="user",
-        uselist=False
+        uselist=False,
     )
 
 
 class ClassSection(Base):
     __tablename__ = "classes"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    section = Column(String(20), nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    section: Mapped[str | None] = mapped_column(String(20), nullable=True)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+    )
 
 
 class Student(Base):
     __tablename__ = "students"
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
-    student_code = Column(String(50), nullable=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    student_code: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
-    class_id = Column(
+    class_id: Mapped[int | None] = mapped_column(
         Integer,
         ForeignKey("classes.id"),
-        nullable=True
+        nullable=True,
     )
 
-    user_id = Column(
+    user_id: Mapped[int | None] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=True
+        nullable=True,
     )
 
-    parent_id = Column(
+    parent_id: Mapped[int | None] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=True
+        nullable=True,
     )
 
-    teacher_id = Column(
+    teacher_id: Mapped[int | None] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=True
+        nullable=True,
     )
 
-    attendance_percentage = Column(
+    attendance_percentage: Mapped[float] = mapped_column(
         Float,
-        default=0.0
+        default=0.0,
     )
 
-    user = relationship(
+    user: Mapped["User | None"] = relationship(
         "User",
         foreign_keys=[user_id],
-        back_populates="student"
+        back_populates="student",
     )
+
 
 class Attendance(Base):
     __tablename__ = "attendance"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-    student_id = Column(
+    student_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("students.id"),
-        nullable=False
+        nullable=False,
     )
 
-    date = Column(Date, nullable=False)
-    status = Column(String(20), nullable=False)
+    date: Mapped[date] = mapped_column(Date, nullable=False)
+    status: Mapped[str] = mapped_column(String(20), nullable=False)
 
 
 class EscalationRequest(Base):
     __tablename__ = "escalation_requests"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-    requester_id = Column(
+    requester_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
     )
 
-    student_id = Column(
+    student_id: Mapped[int | None] = mapped_column(
         Integer,
         ForeignKey("students.id"),
-        nullable=True
+        nullable=True,
     )
 
-    teacher_id = Column(
+    teacher_id: Mapped[int | None] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=True
+        nullable=True,
     )
 
-    request_type = Column(String(50), nullable=False)
-    reason = Column(Text, nullable=True)
+    request_type: Mapped[str] = mapped_column(String(50), nullable=False)
+    reason: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-    status = Column(String(30), default="pending")
-    ticket_id = Column(String(100), nullable=True)
+    status: Mapped[str] = mapped_column(String(30), default="pending")
+    ticket_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
 
-    created_at = Column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
     )
 
 
 class Conversation(Base):
     __tablename__ = "conversations"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
-    user_id = Column(
+    user_id: Mapped[int] = mapped_column(
         Integer,
         ForeignKey("users.id"),
-        nullable=False
+        nullable=False,
     )
 
-    session_id = Column(String(100), nullable=False)
+    session_id: Mapped[str] = mapped_column(String(100), nullable=False)
+    role: Mapped[str] = mapped_column(String(20), nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
 
-    role = Column(String(20), nullable=False)
-
-    message = Column(Text, nullable=False)
-
-    created_at = Column(
+    created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.utcnow
+        default=datetime.utcnow,
     )

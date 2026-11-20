@@ -1,28 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+
 import Navbar from "../components/Navbar";
 import StatCard from "../components/StatCard";
 import ProgressRing from "../components/ProgressRing";
 import LoadingSpinner from "../components/LoadingSpinner";
 import AIChat from "../components/AIChat";
-import { 
-    Award, 
-    BookOpen, 
-    CalendarX, 
-    Target, 
-    RefreshCw, 
-    CheckCircle2, 
+
+import {
+    Award,
+    BookOpen,
+    CalendarX,
+    Target,
+    RefreshCw,
+    CheckCircle2,
     AlertTriangle,
     Calculator,
-    Sparkles
+    Sparkles,
+    TrendingUp,
+    ShieldCheck
 } from "lucide-react";
+
+import "./StudentDashboard.css";
 
 function StudentDashboard() {
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
 
+    const [user, setUser] = useState(null);
     const [attendance, setAttendance] = useState(null);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
@@ -41,6 +48,7 @@ function StudentDashboard() {
 
         try {
             const parsedUser = JSON.parse(userData);
+
             setUser(parsedUser);
 
             if (parsedUser.role !== "student") {
@@ -99,83 +107,141 @@ function StudentDashboard() {
 
     const getStatusInfo = (percentage) => {
         const val = Number(percentage) || 0;
+
         if (val >= 85) {
-            return { label: "Good Standing", type: "badge-success", color: "var(--success-green)" };
-        } else if (val >= 75) {
-            return { label: "Average", type: "badge-warning", color: "var(--warning-yellow)" };
-        } else {
-            return { label: "Low Standing", type: "badge-danger", color: "var(--error-red)" };
+            return {
+                label: "Good Standing",
+                type: "badge-success",
+                color: "#16A34A",
+                description: "You're meeting the attendance requirement."
+            };
         }
+
+        if (val >= 75) {
+            return {
+                label: "Average",
+                type: "badge-warning",
+                color: "#F59E0B",
+                description: "You're close. Keep attending classes regularly."
+            };
+        }
+
+        return {
+            label: "Low Standing",
+            type: "badge-danger",
+            color: "#DC2626",
+            description: "Your attendance needs immediate attention."
+        };
     };
 
     if (loading && !attendance) {
         return (
             <div className="app-container">
                 <Navbar user={user} />
-                <div className="dashboard-container" style={{ textAlign: 'center', paddingTop: '80px' }}>
-                    <LoadingSpinner message="Loading your student overview..." orange={true} />
+
+                <div className="dashboard-container student-dashboard-loading">
+                    <LoadingSpinner
+                        message="Loading your student overview..."
+                        orange={false}
+                    />
                 </div>
             </div>
         );
     }
 
-    const percentageVal = attendance?.attendance_percentage || 0;
+    const percentageVal = Number(
+        attendance?.attendance_percentage || 0
+    );
+
     const statusObj = getStatusInfo(percentageVal);
 
+    const classesAttended = attendance?.classes_attended ?? 0;
+    const classesMissed = attendance?.classes_missed ?? 0;
+
     return (
-        <div className="app-container">
+        <div className="app-container student-dashboard-page">
             <Navbar user={user} />
 
-            <main className="dashboard-container animate-fade-in">
-                {/* Header Greeting */}
-                <header className="dashboard-header">
-                    <div>
-                        <h1>Good Morning, {user?.name || "Student"} 👋</h1>
-                        <p>Here is your personal attendance breakdown and AI learning assistant.</p>
+            <main className="dashboard-container student-dashboard animate-fade-in">
+
+                {/* =================================================
+                    PAGE HEADER
+                ================================================== */}
+
+                <header className="student-page-header">
+                    <div className="student-welcome">
+                        <div className="student-welcome-label">
+                            <span className="student-welcome-dot"></span>
+                            STUDENT OVERVIEW
+                        </div>
+
+                        <h1>
+                            Good morning, {user?.name || "Student"}
+                            <span className="student-wave"> 👋</span>
+                        </h1>
+
+                        <p>
+                            Stay on top of your attendance, track your goals,
+                            and get insights from your AI assistant.
+                        </p>
                     </div>
 
-                    <button 
-                        type="button" 
-                        onClick={loadAttendance} 
-                        className="btn btn-secondary"
+                    <button
+                        type="button"
+                        onClick={loadAttendance}
+                        className="student-refresh-btn"
                         disabled={loading}
                     >
-                        <RefreshCw size={16} className={loading ? "spinner-orange" : ""} />
-                        <span>{loading ? "Refreshing..." : "Refresh Stats"}</span>
+                        <RefreshCw
+                            size={17}
+                            className={loading ? "student-refresh-spin" : ""}
+                        />
+
+                        {loading ? "Refreshing..." : "Refresh data"}
                     </button>
                 </header>
 
+                {/* Error message */}
+
                 {error && (
-                    <div className="alert alert-error">
+                    <div className="student-alert student-alert-error">
                         <AlertTriangle size={18} />
                         <span>{error}</span>
                     </div>
                 )}
 
-                {/* Top Statistics Cards */}
-                <div className="stats-grid">
+                {/* =================================================
+                    STATISTICS
+                ================================================== */}
+
+                <section className="student-stats-grid">
+
                     <StatCard
                         title="Attendance Percentage"
                         value={`${percentageVal}%`}
                         icon={Award}
-                        subtext={`Student ID: ${attendance?.student_id || 'N/A'}`}
-                        statusBadge={<span className={`badge ${statusObj.type}`}>{statusObj.label}</span>}
-                        accentColor="var(--primary-orange)"
+                        subtext={`Student ID: ${attendance?.student_id ?? "N/A"}`}
+                        statusBadge={
+                            <span className={`badge ${statusObj.type}`}>
+                                {statusObj.label}
+                            </span>
+                        }
+                        accentColor="#38BDF8"
                     />
-                    
+
                     <StatCard
                         title="Classes Attended"
-                        value={attendance?.classes_attended ?? 42}
+                        value={classesAttended}
                         icon={BookOpen}
-                        subtext="Total attended this term"
+                        subtext="Total classes attended"
                         accentColor="#16A34A"
                     />
 
                     <StatCard
                         title="Classes Missed"
-                        value={attendance?.classes_missed ?? 9}
+                        value={classesMissed}
                         icon={CalendarX}
-                        subtext="Absent days record"
+                        subtext="Total absences recorded"
                         accentColor="#DC2626"
                     />
 
@@ -183,128 +249,340 @@ function StudentDashboard() {
                         title="Academic Standing"
                         value={statusObj.label}
                         icon={CheckCircle2}
-                        subtext="Based on school threshold (85%)"
-                        accentColor="var(--dark-navy)"
+                        subtext="Minimum requirement: 85%"
+                        accentColor="#172554"
                     />
-                </div>
 
-                {/* Main Content Layout */}
-                <div className="dashboard-grid">
-                    {/* Left Column: Detailed Attendance & Goal Planner */}
-                    <div>
-                        {/* Attendance Overview Card with Circular Gauge */}
-                        <div className="dashboard-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexWrap: 'wrap', gap: '24px' }}>
-                            <ProgressRing percentage={percentageVal} size={170} strokeWidth={14} label="Current" />
-                            
-                            <div style={{ flex: 1, minWidth: '220px' }}>
-                                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--primary-orange-light)', color: 'var(--primary-orange)', padding: '4px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: '600', marginBottom: '12px' }}>
-                                    <Sparkles size={14} />
-                                    <span>Target Goal Tracking</span>
+                </section>
+
+                {/* =================================================
+                    MAIN DASHBOARD GRID
+                ================================================== */}
+
+                <section className="student-main-grid">
+
+                    {/* LEFT COLUMN */}
+
+                    <div className="student-main-column">
+
+                        {/* ATTENDANCE OVERVIEW */}
+
+                        <section className="student-panel student-overview-panel">
+
+                            <div className="student-overview-top">
+                                <div className="student-section-eyebrow">
+                                    <TrendingUp size={15} />
+                                    ATTENDANCE INSIGHTS
                                 </div>
-                                <h3 style={{ fontSize: '1.4rem', color: 'var(--dark-navy)', marginBottom: '8px' }}>My Attendance Overview</h3>
-                                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '16px' }}>
-                                    Keep your overall percentage above <strong>85%</strong> to maintain good academic standing and qualify for final examinations.
-                                </p>
-                                <div style={{ background: 'var(--bg-soft-gray)', padding: '14px 18px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '0.875rem', fontWeight: '600', color: 'var(--dark-navy)' }}>Target Goal</span>
-                                    <span style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary-orange)' }}>85.0%</span>
+
+                                <span className={`badge ${statusObj.type}`}>
+                                    {statusObj.label}
+                                </span>
+                            </div>
+
+                            <div className="student-overview-content">
+
+                                {/* Ring */}
+
+                                <div className="student-ring-wrapper">
+                                    <ProgressRing
+                                        percentage={percentageVal}
+                                        size={175}
+                                        strokeWidth={14}
+                                        label="Current"
+                                    />
+
+                                    <div className="student-ring-caption">
+                                        Overall attendance
+                                    </div>
+                                </div>
+
+                                {/* Content */}
+
+                                <div className="student-overview-details">
+
+                                    <h2>My Attendance Overview</h2>
+
+                                    <p>
+                                        {statusObj.description}
+                                    </p>
+
+                                    <div className="student-target-info">
+                                        <div className="student-target-info-icon">
+                                            <Target size={19} />
+                                        </div>
+
+                                        <div className="student-target-info-text">
+                                            <span>Minimum attendance target</span>
+                                            <strong>85%</strong>
+                                        </div>
+                                    </div>
+
+                                    {/* Progress comparison */}
+
+                                    <div className="student-threshold-section">
+
+                                        <div className="student-threshold-heading">
+                                            <span>Your progress</span>
+                                            <span>{percentageVal}% / 85%</span>
+                                        </div>
+
+                                        <div className="student-threshold-track">
+                                            <div
+                                                className={`student-threshold-fill ${
+                                                    percentageVal >= 85
+                                                        ? "student-threshold-achieved"
+                                                        : ""
+                                                }`}
+                                                style={{
+                                                    width: `${Math.min(
+                                                        (percentageVal / 85) * 100,
+                                                        100
+                                                    )}%`
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="student-threshold-foot">
+                                            {percentageVal >= 85 ? (
+                                                <span className="student-threshold-good">
+                                                    <ShieldCheck size={14} />
+                                                    Requirement achieved
+                                                </span>
+                                            ) : (
+                                                <span className="student-threshold-warning">
+                                                    {(85 - percentageVal).toFixed(2)}%
+                                                    below target
+                                                </span>
+                                            )}
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
 
-                        {/* Goal Calculator Card */}
-                        <div className="dashboard-card">
-                            <h2>
-                                <Calculator size={22} style={{ color: 'var(--primary-orange)' }} />
-                                <span>🎯 Attendance Goal Planner</span>
-                            </h2>
-                            <p style={{ color: 'var(--text-muted)', fontSize: '0.925rem', marginBottom: '20px' }}>
-                                Find out how many upcoming classes you need to attend consecutively to achieve your desired target attendance.
-                            </p>
+                        {/* ATTENDANCE GOAL PLANNER */}
 
-                            <form onSubmit={calculateGoal} style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'flex-end', marginBottom: '20px' }}>
-                                <div style={{ flex: 1, minWidth: '200px' }}>
-                                    <label>Target Attendance %</label>
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="100"
-                                        step="0.01"
-                                        placeholder="Example: 85"
-                                        value={target}
-                                        onChange={(e) => setTarget(e.target.value)}
-                                        required
-                                    />
+                        <section className="student-panel student-goal-panel">
+
+                            <div className="student-panel-heading">
+
+                                <div className="student-heading-icon student-heading-orange">
+                                    <Calculator size={21} />
                                 </div>
 
-                                <button 
-                                    type="submit" 
-                                    className="btn btn-primary" 
+                                <div>
+                                    <h2>Attendance Goal Planner</h2>
+                                    <p>
+                                        Build a plan to reach your desired attendance.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <form
+                                onSubmit={calculateGoal}
+                                className="student-goal-form"
+                            >
+
+                                <div className="student-goal-input-group">
+                                    <label htmlFor="attendance-target">
+                                        Target attendance percentage
+                                    </label>
+
+                                    <div className="student-target-input-wrapper">
+                                        <input
+                                            id="attendance-target"
+                                            type="number"
+                                            min="1"
+                                            max="100"
+                                            step="0.01"
+                                            placeholder="Enter your target"
+                                            value={target}
+                                            onChange={(e) => setTarget(e.target.value)}
+                                            required
+                                        />
+
+                                        <span className="student-input-suffix">
+                                            %
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="student-calculate-btn"
                                     disabled={goalLoading}
-                                    style={{ height: '45px' }}
                                 >
                                     {goalLoading ? (
-                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                                            <span className="spinner"></span>
-                                            <span>Calculating...</span>
-                                        </span>
+                                        <>
+                                            <span className="student-button-spinner" />
+                                            Calculating...
+                                        </>
                                     ) : (
-                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                                            <Target size={16} />
-                                            <span>Calculate Goal</span>
-                                        </span>
+                                        <>
+                                            <Target size={17} />
+                                            Calculate goal
+                                        </>
                                     )}
                                 </button>
+
                             </form>
 
-                            {/* Result Card */}
+                            {/* AI RESULT */}
+
                             {goalResult && (
-                                <div 
-                                    className="animate-fade-in"
-                                    style={{ 
-                                        background: 'var(--primary-orange-light)', 
-                                        border: '1px solid rgba(255, 122, 0, 0.25)', 
-                                        borderRadius: 'var(--radius-md)', 
-                                        padding: '20px' 
-                                    }}
-                                >
-                                    <h4 style={{ color: 'var(--dark-navy)', fontSize: '1rem', fontWeight: '700', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <Sparkles size={18} style={{ color: 'var(--primary-orange)' }} />
-                                        <span>AI Calculation Result</span>
-                                    </h4>
-                                    <p style={{ color: 'var(--dark-navy)', fontSize: '0.95rem', marginBottom: '14px' }}>
+                                <div className="student-goal-result animate-fade-in">
+
+                                    <div className="student-result-header">
+                                        <div className="student-result-icon">
+                                            <Sparkles size={18} />
+                                        </div>
+
+                                        <div>
+                                            <h3>AI Goal Calculation</h3>
+                                            <span>Your personalized attendance plan</span>
+                                        </div>
+                                    </div>
+
+                                    <p className="student-result-message">
                                         {goalResult.message}
                                     </p>
 
                                     {goalResult.data && (
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255, 122, 0, 0.2)' }}>
-                                            <div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Current %</div>
-                                                <div style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--dark-navy)' }}>{goalResult.data.current_percentage}%</div>
+                                        <div className="student-result-metrics">
+
+                                            <div className="student-result-metric">
+                                                <span>Current attendance</span>
+                                                <strong>
+                                                    {goalResult.data.current_percentage}%
+                                                </strong>
                                             </div>
-                                            <div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Target %</div>
-                                                <div style={{ fontSize: '1.1rem', fontWeight: '700', color: 'var(--primary-orange)' }}>{goalResult.data.target_percentage}%</div>
+
+                                            <div className="student-result-metric">
+                                                <span>Target attendance</span>
+                                                <strong className="student-result-blue">
+                                                    {goalResult.data.target_percentage}%
+                                                </strong>
                                             </div>
-                                            <div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Classes Needed</div>
-                                                <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#16A34A' }}>{goalResult.data.classes_needed} classes</div>
+
+                                            <div className="student-result-metric">
+                                                <span>Classes required</span>
+                                                <strong className="student-result-green">
+                                                    {goalResult.data.classes_needed}
+                                                </strong>
                                             </div>
+
                                         </div>
                                     )}
+
                                 </div>
                             )}
-                        </div>
+
+                        </section>
+
+                        {/* QUICK ATTENDANCE SUMMARY */}
+
+                        <section className="student-panel student-summary-panel">
+
+                            <div className="student-panel-heading">
+
+                                <div className="student-heading-icon student-heading-blue">
+                                    <BookOpen size={21} />
+                                </div>
+
+                                <div>
+                                    <h2>Attendance Summary</h2>
+                                    <p>A quick look at your class records.</p>
+                                </div>
+
+                            </div>
+
+                            <div className="student-summary-items">
+
+                                <div className="student-summary-item student-summary-present">
+                                    <div className="student-summary-icon">
+                                        <CheckCircle2 size={19} />
+                                    </div>
+
+                                    <div>
+                                        <span>Classes attended</span>
+                                        <strong>{classesAttended}</strong>
+                                    </div>
+                                </div>
+
+                                <div className="student-summary-item student-summary-absent">
+                                    <div className="student-summary-icon">
+                                        <CalendarX size={19} />
+                                    </div>
+
+                                    <div>
+                                        <span>Classes missed</span>
+                                        <strong>{classesMissed}</strong>
+                                    </div>
+                                </div>
+
+                                <div className="student-summary-item student-summary-total">
+                                    <div className="student-summary-icon">
+                                        <BookOpen size={19} />
+                                    </div>
+
+                                    <div>
+                                        <span>Total recorded classes</span>
+                                        <strong>{classesAttended + classesMissed}</strong>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </section>
+
                     </div>
 
-                    {/* Right Column: AI Assistant Component */}
-                    <div>
-                        <AIChat 
-                            title="🤖 XYZ AI Assistant" 
-                            subtitle="Ask about attendance rules, required classes, or academic status." 
-                        />
-                    </div>
-                </div>
+                    {/* RIGHT COLUMN - AI ASSISTANT */}
+
+                    <aside className="student-ai-column">
+
+                        <div className="student-ai-intro">
+
+                            <div className="student-ai-brand">
+                                <div className="student-ai-icon">
+                                    <Sparkles size={20} />
+                                </div>
+
+                                <div>
+                                    <span className="student-ai-label">
+                                        AI POWERED
+                                    </span>
+
+                                    <h2>Campus IQ Assistant</h2>
+                                </div>
+                            </div>
+
+                            <p>
+                                Your personal assistant for attendance questions,
+                                academic insights, and planning.
+                            </p>
+
+                            <div className="student-ai-status">
+                                <span className="student-ai-status-dot"></span>
+                                Ready to assist
+                            </div>
+
+                        </div>
+
+                        <div className="student-ai-chat-wrapper">
+                            <AIChat
+                                title="Campus IQ Assistant"
+                                subtitle="Ask about attendance, required classes, or academic status."
+                            />
+                        </div>
+
+                    </aside>
+
+                </section>
+
             </main>
         </div>
     );

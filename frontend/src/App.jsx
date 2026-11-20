@@ -1,8 +1,10 @@
+
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import StudentRegister from "./pages/StudentRegister";
 import ParentRegister from "./pages/ParentRegister";
+import AdminRegister from "./pages/AdminRegister";
 
 import StudentDashboard from "./pages/StudentDashboard";
 import ParentDashboard from "./pages/ParentDashboard";
@@ -13,6 +15,7 @@ import PrincipalDashboard from "./pages/PrincipalDashboard";
 function App() {
 
     const token = localStorage.getItem("token");
+
     const user = JSON.parse(
         localStorage.getItem("user") || "null"
     );
@@ -38,6 +41,9 @@ function App() {
             case "principal":
                 return <PrincipalDashboard />;
 
+            case "admin":
+                return <AdminRegister />;
+
             default:
                 return <Navigate to="/" replace />;
         }
@@ -48,54 +54,57 @@ function App() {
 
         <Routes>
 
-            {/* =========================
-                LOGIN
-            ========================== */}
-            <Route
-    path="/principal-dashboard"
-    element={<PrincipalDashboard />}
-/>
-
+            {/* LOGIN */}
             <Route
                 path="/"
                 element={<Login />}
             />
 
 
-            {/* =========================
-                STUDENT REGISTRATION
-            ========================== */}
-
+            {/* STUDENT REGISTRATION */}
             <Route
                 path="/register/student"
                 element={<StudentRegister />}
             />
 
 
-            {/* =========================
-                PARENT REGISTRATION
-            ========================== */}
-
+            {/* PARENT REGISTRATION */}
             <Route
                 path="/register/parent"
                 element={<ParentRegister />}
             />
 
 
-            {/* =========================
-                COMMON DASHBOARD
-            ========================== */}
+            {/* ADMIN REGISTRATION - ADMIN ONLY */}
+            <Route
+                path="/admin/register"
+                element={
+                    token && user?.role === "admin"
+                        ? <AdminRegister />
+                        : <Navigate to="/" replace />
+                }
+            />
 
+
+            {/* ADMIN ROUTE */}
+            <Route
+                path="/admin"
+                element={
+                    token && user?.role === "admin"
+                        ? <Navigate to="/admin/register" replace />
+                        : <Navigate to="/" replace />
+                }
+            />
+
+
+            {/* COMMON DASHBOARD */}
             <Route
                 path="/dashboard"
                 element={getDashboard()}
             />
 
 
-            {/* =========================
-                STUDENT
-            ========================== */}
-
+            {/* STUDENT */}
             <Route
                 path="/student"
                 element={
@@ -106,10 +115,7 @@ function App() {
             />
 
 
-            {/* =========================
-                PARENT
-            ========================== */}
-
+            {/* PARENT */}
             <Route
                 path="/parent"
                 element={
@@ -120,10 +126,7 @@ function App() {
             />
 
 
-            {/* =========================
-                TEACHER
-            ========================== */}
-
+            {/* TEACHER */}
             <Route
                 path="/teacher"
                 element={
@@ -134,10 +137,7 @@ function App() {
             />
 
 
-            {/* =========================
-                PRINCIPAL
-            ========================== */}
-
+            {/* PRINCIPAL */}
             <Route
                 path="/principal"
                 element={
@@ -148,10 +148,18 @@ function App() {
             />
 
 
-            {/* =========================
-                INVALID URL
-            ========================== */}
+            {/* PRINCIPAL DASHBOARD (EXISTING ROUTE) */}
+            <Route
+                path="/principal-dashboard"
+                element={
+                    token && user?.role === "principal"
+                        ? <PrincipalDashboard />
+                        : <Navigate to="/" replace />
+                }
+            />
 
+
+            {/* INVALID URL */}
             <Route
                 path="*"
                 element={<Navigate to="/" replace />}

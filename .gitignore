@@ -21,4 +21,9 @@ __pycache__/
 
 # OS
 .DS_Store
-Thumbs.db
+Thumbs.db 
+# Local databases
+backend/*.db
+backend/**/*.db
+*.sqlite
+*.sqlite3   
