@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 import {
     User,
     Lock,
@@ -25,16 +25,16 @@ function Login() {
         setLoading(true);
 
         try {
-            const response = await axios.post(
-                "http://127.0.0.1:8000/login",
-                null,
-                {
-                    params: {
-                        username,
-                        password,
-                    },
-                }
-            );
+           const response = await api.post(
+    "/login",
+    null,
+    {
+        params: {
+            username,
+            password,
+        },
+    }
+);
 
             const token = response.data.access_token;
             const user = response.data.user;
