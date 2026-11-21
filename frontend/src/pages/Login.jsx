@@ -36,6 +36,13 @@ function Login() {
     }
 );
 
+console.log("LOGIN RESPONSE:", {
+    hasToken: !!response.data.access_token,
+    user: response.data.user,
+    responseData: response.data,
+});
+
+
             const token = response.data.access_token;
             const user = response.data.user;
 
