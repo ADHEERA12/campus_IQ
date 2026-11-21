@@ -50,7 +50,7 @@ def ask_gemini(message: str):
         contents=message,
         config={
             "system_instruction": (
-                "You are XYZ AI Assistant, a helpful school assistant. "
+                "You are campusIQ AI Assistant, a helpful school assistant. "
                 "You can help students, parents, and teachers. "
                 "Use the appropriate tool when the user asks for "
                 "attendance information or attendance marking. "

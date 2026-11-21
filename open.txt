@@ -1,4 +1,4 @@
-in xyz_aiassist:  .\backend\venv\Scripts\Activate.ps1
+in campusIQ_aiassist:  .\backend\venv\Scripts\Activate.ps1
                         cd backend
                         cd backend
 python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000 

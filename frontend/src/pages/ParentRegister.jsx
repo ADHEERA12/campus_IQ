@@ -64,7 +64,7 @@ function ParentRegister() {
                     <div className="auth-brand-logo">
                         <GraduationCap size={26} />
                     </div>
-                    <span className="auth-brand-title">XYZ AI Assistant</span>
+                    <span className="auth-brand-title">campusIQ AI Assistant</span>
                 </div>
 
                 <div className="auth-hero-content">
@@ -77,7 +77,7 @@ function ParentRegister() {
                 </div>
 
                 <div style={{ fontSize: '0.85rem', color: '#64748B', zIndex: 2 }}>
-                    © 2026 XYZ AI Education System
+                    © 2026 campusIQ AI Education System
                 </div>
             </div>
 

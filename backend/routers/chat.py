@@ -54,7 +54,7 @@ def chat(
         contents=data.message,
         config={
             "system_instruction": (
-                "You are XYZ AI Assistant, a school assistant. "
+                "You are campusIQ AI Assistant, a school assistant. "
                 f"The logged-in user's role is {current_user.role}. "
                 "Use tools to retrieve real attendance information. "
                 "Never invent attendance data. "
@@ -262,7 +262,7 @@ def chat(
             ],
             config={
                 "system_instruction": (
-                    "You are XYZ AI Assistant. "
+                    "You are campusIQ AI Assistant. "
                     "Answer using only the provided tool result. "
                     "Never invent or alter numbers. "
                     "Be clear, friendly and concise."

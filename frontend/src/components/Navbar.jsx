@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, User as UserIcon, Sparkles, Menu, X } from 'lucide-react';
 
-function Navbar({ user, title = "XYZ AI Assistant" }) {
+function Navbar({ user, title = "campusIQ AI Assistant" }) {
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -26,7 +26,7 @@ function Navbar({ user, title = "XYZ AI Assistant" }) {
         <nav className="navbar">
             <div className="navbar-inner">
                 <div className="navbar-brand">
-                    <span className="navbar-logo-badge">XYZ</span>
+                    <span className="navbar-logo-badge">campusIQ</span>
                     <span className="navbar-brand-name">
                         AI <span>Assistant</span>
                     </span>

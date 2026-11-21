@@ -65,7 +65,7 @@ function ChatBox() {
                     <Bot size={20} />
                 </div>
                 <div>
-                    <h3>XYZ AI Assistant</h3>
+                    <h3>campusIQ AI Assistant</h3>
                     <p>Ask me about attendance and school information</p>
                 </div>
             </div>
@@ -121,7 +121,7 @@ function ChatBox() {
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Ask XYZ AI..."
+                    placeholder="Ask campusIQ AI..."
                     disabled={loading}
                 />
                 <button type="submit" className="btn btn-primary" disabled={loading || !message.trim()}>

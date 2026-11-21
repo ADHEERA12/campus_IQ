@@ -65,7 +65,7 @@ def export_excel(
 
     # Title
     ws.merge_cells("A1:E1")
-    ws["A1"] = "XYZ AI Assistant - Attendance Report"
+    ws["A1"] = "campusIQ AI Assistant - Attendance Report"
     ws["A1"].font = Font(
         size=15,
         bold=True,
@@ -197,7 +197,7 @@ def export_pdf(
     # Explicitly declare Flowable list for Pyrefly
     story: list[Flowable] = [
         Paragraph(
-            "XYZ AI Assistant - Attendance Report",
+            "campusIQ AI Assistant - Attendance Report",
             title_style,
         ),
         Paragraph(

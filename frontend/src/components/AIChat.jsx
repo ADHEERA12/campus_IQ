@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import api from "../services/api";
 import { Bot, Send, User, Sparkles, AlertCircle, Wrench } from "lucide-react";
 
-function AIChat({ title = "🤖 XYZ AI Assistant", subtitle = "Your intelligent school attendance assistant." }) {
+function AIChat({ title = "🤖 campusIQ AI Assistant", subtitle = "Your intelligent school attendance assistant." }) {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -208,7 +208,7 @@ function AIChat({ title = "🤖 XYZ AI Assistant", subtitle = "Your intelligent 
                         <div className="chat-bubble ai">
                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                                 <span className="spinner spinner-orange" style={{ width: 14, height: 14 }}></span>
-                                <span>XYZ AI is thinking...</span>
+                                <span>campusIQ AI is thinking...</span>
                             </span>
                         </div>
                     </div>
